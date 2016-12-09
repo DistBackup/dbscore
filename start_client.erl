@@ -1,6 +1,6 @@
 -module(start_client).
 
--export([main/1]).
+-export([start/1]).
 
 -import(client, [join/3, logout/2, init_download/3, init_upload/3]).
 -define(MONITOR_PORT, 8099).
@@ -10,13 +10,7 @@
 %%
 %% Run the client
 %%
-main([Command | _]) -> 
-    case Command of
-        "start" -> join();
-        _       -> usage(),
-                   halt(1)
-    end;
-main([]) -> usage().
+start() -> join().
 
 
 %%
