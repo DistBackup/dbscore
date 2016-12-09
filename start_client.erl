@@ -52,10 +52,3 @@ loop(IPAddr) ->
         _            -> io:format("Enter \"upload\", \"download\", or \"logout\"~n"),
                         loop(IPAddr)
     end.
-
-%%
-%% Show usage
-%%
-usage() -> 
-    io:format("Usage: client start~n"),
-    halt(1).
