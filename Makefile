@@ -1,6 +1,6 @@
 ERLC       = erlc
 BEAM_SHELL = erl
-LONGNAME   = ray@127.0.0.1
+LONGNAME   = brinley@127.0.0.1
 BEAM_FLAGS = -name $(LONGNAME) -setcookie cookie
 
 ERL_SRCS  = $(shell echo *.erl)
