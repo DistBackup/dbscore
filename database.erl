@@ -30,7 +30,10 @@ open_table(client) ->
 init_monitor_dets() ->
     open_table(monitor).
 
-
+% an entry in the monitor's dets contains a client's account information
+% an entry contains the client's node, and reference to the server monitor
+% on the client's node, the pid of the server on the client's node, and the 
+% client's ip address and port
 add_client(Entry = {_ClientNode, _MonitorRef, _NewClientServPid, _ClientIP, _ClientPort}) ->
     open_table(monitor),
     dets:insert('Database', Entry).
@@ -44,6 +47,8 @@ lookup_monitor_ref(ClientNode) ->
     end.
 
 % looks up the clientID from a monitor reference
+% the monitor ref is pattern matched against all clients
+% there should be only one client per monitor-ref
 lookup_client(MonitorRef) ->
     open_table(monitor),
     case dets:match_object('Database', {'_', MonitorRef, '_', '_', '_'}) of
@@ -55,6 +60,7 @@ remove_client_from_database(ClientNode) ->
     open_table(monitor),
     dets:delete('Database', ClientNode).
 
+% prints all entries in the database
 print_all() ->
     open_table(monitor),
     All = dets:foldr(fun (E = {_,_,_, _IP, _Port}, Acc) ->  [E|Acc] end, [], 'Database'),
@@ -69,9 +75,11 @@ clear_table() ->
 % MONITOR_TCP_SERVER DATABASE FUNCS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+% this function returns all peers, self exclusive so that files can be
+% transfered
+% the dets is folded with a function that accumulates {IP, Port} tuples
 lookup_peers(_Self, ClientIP) ->
     open_table(monitor),
-
     Peers = dets:foldr(fun (_E = {_,_,_, IP, Port}, Acc) ->  [{IP, Port}|Acc] end, [], 'Database'),
     proplists:delete(ClientIP, Peers).
 
@@ -82,6 +90,9 @@ lookup_peers(_Self, ClientIP) ->
 init_client_dets() ->
     open_table(client).
 
+% each client keeps a dets of their stored files
+% if a file is changed or deleted, the dets keeps track
+% of the previous hash so that the file can be restored
 add_file_to_table(Entry = {_Filename, _Hash}) ->
     open_table(client),
     dets:insert('Files', Entry).
