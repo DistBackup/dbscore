@@ -82,6 +82,11 @@ open_packet(Socket, {download, _Filename, Hash}) ->
         {ok, Files} ->
             io:fwrite("Searching my peer files: ~p~n", [Files]),
             Hashes = lists:map(fun(File) -> crypto:hash(md5, read(filename:join(["./peer_files", File]))) end, Files),
+            % debug 
+            erlang:display(Hashes),
+            [H | T] = Hashes,
+            erlang:display(Hash =:= H),
+            
             FileIndex = lists:zip(Hashes, Files),
             case lists:keyfind(Hash, 1, FileIndex) of
                 {Hash, File} -> 
