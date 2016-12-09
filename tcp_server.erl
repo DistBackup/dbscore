@@ -80,6 +80,7 @@ open_packet(Socket, {download, _Filename, Hash}) ->
 
     case file:list_dir("peer_files") of
         {ok, Files} ->
+            erlang:display(Files),
             Hashes = lists:map(fun(File) -> crypto:hash(md5, read(filename:join(["./peer_files", File]))) end, Files),
             FileIndex = lists:zip(Hashes, Files),
             case lists:keyfind(Hash, 1, FileIndex) of
