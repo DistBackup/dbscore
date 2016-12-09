@@ -84,6 +84,7 @@ open_packet(Socket, {download, _Filename, Hash}) ->
             FileIndex = lists:zip(Hashes, Files),
             case lists:keyfind(Hash, 1, FileIndex) of
                 {Hash, File} -> 
+                    erlang:display("found file! sending back to client.."),
                     Packet = read(filename:join(["./peer_files", File])),
                     gen_tcp:send(Socket, Packet);
                 false -> 
