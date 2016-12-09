@@ -1,6 +1,6 @@
 -module(start_client).
 
--export([start/1]).
+-export([start/0]).
 
 -import(client, [join/3, logout/2, init_download/3, init_upload/3]).
 -define(MONITOR_PORT, 8099).
