@@ -135,6 +135,8 @@ init_download(MonitorIP, MonitorPort, File) ->
 
     Hash = lookup_file(File),
 
+    erlang:display(Hash),
+
     % build init_download request packet
     Packet = term_to_binary({download, node(), ServPid, Hash, MyIP}),
 
