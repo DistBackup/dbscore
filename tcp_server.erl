@@ -87,7 +87,6 @@ open_packet(Socket, {download, _Filename, Hash}) ->
                     Packet = read(filename:join(["./peer_files", File])),
                     gen_tcp:send(Socket, Packet);
                 false -> 
-                    %Packet = term_to_binary({Hash, "Error: file not found"}),
                     Packet = "Error: file not found",
                     gen_tcp:send(Socket, Packet)
             end;

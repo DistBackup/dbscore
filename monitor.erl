@@ -68,7 +68,6 @@ connect_client(ClientNode, ClientServPid, ClientIP, ClientPort) ->
 
     io:format("LOG: CLIENT REQUESTED JOIN: adding client.~n"),
     % connect to ClientNode
-    % Test this without ping
     net_adm:ping(ClientNode),
     NewClientServPid = rpc:call(ClientNode, erlang, list_to_pid, [ClientServPid]),
     MonitorRef = monitor(process, NewClientServPid),
