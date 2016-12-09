@@ -52,8 +52,6 @@ handle_info({tcp, Socket, <<"quit", _/binary>>}, State) ->
     gen_tcp:close(Socket),
     {stop, normal, State};
 handle_info({tcp, Socket, Packet}, State) ->
-    erlang:display("received packet from client"),
-    erlang:display(binary_to_term(Packet)),
     open_packet(Socket, binary_to_term(Packet)),
     {noreply, State};
 handle_info({tcp_closed, _Socket}, State) -> {stop, normal, State};
