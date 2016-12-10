@@ -4,7 +4,7 @@
 -import(file_proc, [parse_packet/1, write_peer_file/2, read/1]).
 
 -export([start_link/1]).
--export([init/1, handle_call/3, handle_cast/2, handle_info/2, code_change/3, terminate/2]).
+-export([init/1, handle_call/3, handle_cast/2, handle_info/2, code_change/3, terminate/2, stop/0]).
 
 -record(state, {socket}).
 
@@ -81,12 +81,7 @@ open_packet(Socket, {download, _Filename, Hash}) ->
     case file:list_dir("peer_files") of
         {ok, Files} ->
             io:fwrite("Searching my peer files: ~p~n", [Files]),
-            Hashes = lists:map(fun(File) -> crypto:hash(md5, read(filename:join(["./peer_files", File]))) end, Files),
-            % debug 
-            erlang:display(Hashes),
-            [H | T] = Hashes,
-            erlang:display(Hash =:= H),
-            
+            Hashes = lists:map(fun(File) -> crypto:hash(md5, read(filename:join(["./peer_files", File]))) end, Files),            
             FileIndex = lists:zip(Hashes, Files),
             case lists:keyfind(Hash, 1, FileIndex) of
                 {Hash, File} -> 
